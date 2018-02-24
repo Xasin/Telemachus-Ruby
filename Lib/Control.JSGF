@@ -1,0 +1,16 @@
+#JSGF V1.0;
+grammar Test;
+
+<command> = <lights> | <stability> | <thrust>;
+
+<bool> 			= on | off;
+<direction> 	= up | down | forwards | backwards | left | other left;
+<percentages>	= (ten | twenty | thirty | forty | fifty | sixty | seventy | eighty | ninety | [one] hundred) percent;
+
+<lights> 	= lights <bool>;
+<stability>	= stability assist <bool> | face <direction>;
+<thrust>	= thrust <percentages>;
+
+<thrust> 	= cut thrust;
+
+public <commandSeq> = computer <command> (and <command>)* confirm;
