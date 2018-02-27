@@ -15,7 +15,6 @@ $commands = {
 
 	"cut throttle and stage" 	=> [["f.setThrottle[0]","f.stage"], "Staging confirmed"],
 	"full throttle and stage" 	=> [["f.setThrottle[1]","f.stage"], "staging confirmed"],
-	"stability forwards" => ["mj.prograde", "stability direction prograde"]
 }
 
 {"forwards" => "prograde", "backwards" => "retrograde", "up" => "radial plus", "down" => "radial minus", "left" => "normal plus", "other left" => "normal minus"}.each do |mjkey, mjcommand|
