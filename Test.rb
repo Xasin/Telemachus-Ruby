@@ -24,10 +24,9 @@ end
 
 
 config = Pocketsphinx::Configuration::Grammar.new do
-	sentence "computer"
 	$commands.each do |k, v|
 		puts "Adding command '#{k}'"
-		sentence "#{k}"
+		sentence "computer #{k} confirm"
 	end
 end
 
@@ -38,12 +37,14 @@ def speak(msg)
 	`espeak "#{msg}"`
 end
 
-$lastActive = Time.new(0);
+$active = Time.new(0);
 Pocketsphinx::LiveSpeechRecognizer.new(config ).recognize do |speech|
-	if(speech == "computer") then
-		$active = Time.now();
-		speak "Yes"
-	elsif (Time.now - $active).to_f < 10 then
+	if(speech == "computer how do you find my friend") then
+		speak "I think Augustin is a very passable specimen of homo sapiens. Rating 9.9/10";
+	else
+		speech.gsub!(/computer /, "");
+		speech.gsub!(/ confirm/, "");
+
 		if($commands.has_key? speech) then
 			command = $commands[speech];
 			$game._run(command[0]);
