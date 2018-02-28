@@ -1,11 +1,14 @@
-require 'websocket-client-simple'
+require 'faye/websocket'
 require 'json'
+
+require 'net/http'
 
 module Telemachus
 	class BasicConnection
 		def initialize(addr = "127.0.0.1:8085")
 			@data = Hash.new();
-			@address = "ws://#{addr}/datalink"
+			@HTTPaddr = "#{addr}/telemachus/datalink";
+			@WSaddress = "ws://#{addr}/datalink"
 
 			_configure_socket();
 			@guardThread = Thread.new do
@@ -27,28 +30,22 @@ module Telemachus
 
 			@socket.close if @socket;
 
-			@socket = WebSocket::Client::Simple.connect(@address) do |socket|
-				socket.on :message do |msg|
-					base._handle_message(msg.data);
-				end
+			socket = @socket = Faye::WebSocket::Client.new(@WSaddress)
+			socket.on :message do |msg|
+				base._handle_message(msg.data);
+			end
 
-				socket.on :error do |e|
-					puts "Socket had an error!! #{e}"
-					base._configure_socket
-				end
+			socket.on :error do |e|
+				puts "Socket had an error!! #{e}"
+				base._configure_socket
+			end
 
-				socket.on :open do
-					puts "Socket was opened!"
-					socket.send({:+ => ["p.paused"], rate: 500}.to_json)
-				end
-
-				socket.on :close do
-					puts "Socket was closed!"
-				end
+			socket.on :open do
+				puts "Socket open!"
+				socket.send({:+ => ["p.paused"], rate: 500}.to_json)
 			end
 
 			@lastReceived = Time.now() + 1;
-			puts "Socket reconfigured!"
 		end
 
 		def _handle_message(data)
@@ -60,8 +57,9 @@ module Telemachus
 		def _run(command, params = nil)
 			command += "[#{params}]" if params;
 
-			argString = { run: [command].flatten }.to_json;
-			@socket.send(argString);
+			puts "URI string: #{uri = "http://#{@HTTPaddr}?run=#{command}"}"
+
+			Net::HTTP.get(URI(uri));
 		end
 
 		def +(topic)
