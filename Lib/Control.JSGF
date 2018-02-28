@@ -1,16 +1,14 @@
 #JSGF V1.0;
 grammar Test;
 
-<command> = <lights> | <stability> | <thrust>;
+<command> = <lights> | <stability> | <thrust> | stage craft;
 
 <bool> 			= on | off;
-<direction> 	= up | down | forwards | backwards | left | other left;
+<direction> 	= up | down | forwards | backwards | left | other left | node;
 <percentages>	= (ten | twenty | thirty | forty | fifty | sixty | seventy | eighty | ninety | [one] hundred) percent;
 
 <lights> 	= lights <bool>;
 <stability>	= stability assist <bool> | face <direction>;
-<thrust>	= thrust <percentages>;
+<thrust>		= thrust <percentages> | cut thrust | full thrust;
 
-<thrust> 	= cut thrust;
-
-public <commandSeq> = computer <command> (and <command>)* confirm;
+public <commandSeq> = computer <command> (and <command>)*;
