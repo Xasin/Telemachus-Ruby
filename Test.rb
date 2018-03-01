@@ -33,10 +33,7 @@ def speak(msg)
 	`espeak "#{msg}"`
 end
 
-Net::HTTP.get(URI("http://127.0.0.1:8085/telemachus/datalink?run=mj.radialplus"));
-
 Pocketsphinx::LiveSpeechRecognizer.new(config).recognize do |speech|
-
 	print "Processing: '#{speech}': "
 
 	speech.gsub!(/computer /, "");
