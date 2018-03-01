@@ -10,6 +10,6 @@ grammar Test;
 <togglable> = (lights | reaction control [system] | stability assist | gear | brakes | precision controls) [<bool>];
 <stability>	= (face | head) <direction>;
 <thrust>	= (<percentages> | cut | full) thrust;
-<query>		= orbit | [(highest | lowest)] altitude | fuel |
+<query>		= orbit | [(highest | lowest)] altitude | fuel;
 
 public <commandSeq> = computer <command> (and <command>)*;
