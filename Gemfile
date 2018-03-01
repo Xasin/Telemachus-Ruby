@@ -1,4 +1,3 @@
-gem 'websocket-client-simple'
-gem 'json'
 
+gem 'json'
 gem 'pocketsphinx-ruby'

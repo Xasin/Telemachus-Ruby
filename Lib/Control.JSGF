@@ -1,9 +1,9 @@
 #JSGF V1.0;
 grammar Test;
 
-<command> = <togglable> | <stability> | <thrust> | stage | query <query>;
+<command> = <togglable> | <stability> | <thrust> | stage craft | query <query>;
 
-<bool> 			= on | off;
+<bool> 			= on | off | down | up;
 <direction> 	= up | down | forwards | backwards | left | other left | towards node;
 <percentages>	= (zero | ten | twenty | thirty | forty | fifty | sixty | seventy | eighty | ninety | [one] hundred) percent;
 
@@ -12,4 +12,4 @@ grammar Test;
 <thrust>	= (<percentages> | cut | full) thrust;
 <query>		= orbit | [(highest | lowest)] altitude | fuel |
 
-public <commandSeq> = computer <command> (and <command>)* confirm;
+public <commandSeq> = computer <command> (and <command>)*;

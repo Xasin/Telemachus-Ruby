@@ -1,32 +1,31 @@
-require 'websocket-client-simple'
 require 'json'
 
+require 'net/http'
+
 module Telemachus
-	class BasicConnection
+	class Connection
 		def initialize(addr = "127.0.0.1:8085")
 			@data = Hash.new();
-			@address = "ws://#{addr}/datalink"
+			@HTTPAddr = URI("http://#{addr}/telemachus/datalink");
 		end
 
 		def _run(command, params = nil)
 			command += "[#{params}]" if params;
 
-			argString = { run: [command].flatten }.to_json;
-			@socket.send(argString);
+			uri = @HTTPAddr.encode_www_form({run: command});
+
+			begin
+				Net::HTTP.get(uri);
+			rescue
+			end
 		end
 
 		def [](key)
-			return @data[key]
-		end
-	end
-
-	class Connection < BasicConnection
-		def stage!
-			_run("f.stage")
-		end
-
-		def abort!
-			_run("f.abort")
+			uri = @HTTPAddr.encode_www_form({a: key});
+			begin
+				resp = Net::HTTP.get_response(uri);
+				return JSON.parse(resp.body)["a"];
+			end
 		end
 	end
 end
