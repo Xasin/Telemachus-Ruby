@@ -1,16 +1,15 @@
 #JSGF V1.0;
 grammar Test;
 
-<command> = <lights> | <stability> | <thrust>;
+<command> = <togglable> | <stability> | <thrust> | stage | query <query>;
 
 <bool> 			= on | off;
-<direction> 	= up | down | forwards | backwards | left | other left;
-<percentages>	= (ten | twenty | thirty | forty | fifty | sixty | seventy | eighty | ninety | [one] hundred) percent;
+<direction> 	= up | down | forwards | backwards | left | other left | towards node;
+<percentages>	= (zero | ten | twenty | thirty | forty | fifty | sixty | seventy | eighty | ninety | [one] hundred) percent;
 
-<lights> 	= lights <bool>;
-<stability>	= stability assist <bool> | face <direction>;
-<thrust>	= thrust <percentages>;
-
-<thrust> 	= cut thrust;
+<togglable> = (lights | reaction control [system] | stability assist | gear | brakes | precision controls) [<bool>];
+<stability>	= (face | head) <direction>;
+<thrust>	= (<percentages> | cut | full) thrust;
+<query>		= orbit | [(highest | lowest)] altitude | fuel |
 
 public <commandSeq> = computer <command> (and <command>)* confirm;
